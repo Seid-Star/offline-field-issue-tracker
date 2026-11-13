@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 import {
   Bell,
   ChevronDown,
@@ -10,20 +10,17 @@ import {
   UserCheck,
   Wifi,
   WifiOff,
-} from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useApp } from '../../context/AppContext.jsx';
-import { useNetwork } from '../../context/NetworkContext.jsx';
-import { DEMO_USERS } from '../../utils/constants.js';
-import { Avatar } from '../common/Avatar.jsx';
-import { PWAInstallButton } from '../common/PWAInstallButton.jsx';
+} from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useApp } from "../../context/AppContext.jsx";
+import { useNetwork } from "../../context/NetworkContext.jsx";
+import { DEMO_USERS } from "../../utils/constants.js";
+import { Avatar } from "../common/Avatar.jsx";
+import { PWAInstallButton } from "../common/PWAInstallButton.jsx";
 
-export function Header({
-  title,
-  breadcrumbs = [],
-  onOpenMobileMenu,
-}) {
+export function Header({ title, breadcrumbs = [], onOpenMobileMenu }) {
   const navigate = useNavigate();
+
   const {
     currentUser,
     demoRole,
@@ -34,6 +31,7 @@ export function Header({
     globalSearch,
     setGlobalSearch,
   } = useApp();
+
   const {
     effectiveOnline,
     simulatedOffline,
@@ -43,6 +41,7 @@ export function Header({
 
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [networkPopoverOpen, setNetworkPopoverOpen] = useState(false);
+
   const profileRef = useRef(null);
   const networkRef = useRef(null);
 
@@ -51,130 +50,170 @@ export function Header({
       if (profileRef.current && !profileRef.current.contains(e.target)) {
         setProfileMenuOpen(false);
       }
+
       if (networkRef.current && !networkRef.current.contains(e.target)) {
         setNetworkPopoverOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    navigate('/reports');
+    navigate("/reports");
   };
 
   const pendingBadgeCount = stats.pendingSync + stats.failedSync;
 
   return (
-    <header className="sticky top-0 z-30 glass-light border-b border-[#123D35]/10 px-4 lg:px-6 py-2.5 lg:py-3">
+    <header className="sticky top-0 z-30 border-b border-[#BE732F]/15 bg-[#EFEEEC]/95 px-3 py-3 shadow-[0_4px_20px_rgba(85,47,11,0.035)] backdrop-blur-xl sm:px-5 lg:px-7">
       <div className="flex items-center justify-between gap-3">
-        {/* Left: Mobile Menu Trigger + Title & Breadcrumbs */}
-        <div className="flex items-center gap-3 min-w-0">
+        {/* Left: Mobile Menu and Page Title */}
+        <div className="flex min-w-0 items-center gap-3">
           <button
             type="button"
             onClick={onOpenMobileMenu}
             aria-label="Open navigation menu"
-            className="lg:hidden min-h-[44px] min-w-[44px] -ml-2 flex items-center justify-center rounded-xl text-[#172B27] hover:bg-[#123D35]/8 cursor-pointer"
+            className="flex min-h-10 min-w-10 cursor-pointer items-center justify-center rounded-xl border border-[#BE732F]/20 text-[#552F0B] transition-colors hover:bg-[#F4B64F]/15 lg:hidden"
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="h-5 w-5" />
           </button>
 
           <div className="min-w-0">
             {breadcrumbs.length > 0 && (
               <nav
                 aria-label="Breadcrumb"
-                className="hidden sm:flex items-center gap-1 text-[11px] text-[#71817B] mb-0.5"
+                className="mb-1 hidden items-center gap-1 text-[11px] text-[#552F0B]/55 sm:flex"
               >
                 {breadcrumbs.map((crumb, idx) => (
                   <span key={crumb.label} className="flex items-center gap-1">
-                    {idx > 0 && <ChevronRight className="w-3 h-3" aria-hidden="true" />}
+                    {idx > 0 && (
+                      <ChevronRight
+                        className="h-3 w-3 text-[#BE732F]"
+                        aria-hidden="true"
+                      />
+                    )}
+
                     {crumb.to ? (
-                      <Link to={crumb.to} className="hover:text-[#123D35] transition-colors">
+                      <Link
+                        to={crumb.to}
+                        className="transition-colors hover:text-[#BE732F]"
+                      >
                         {crumb.label}
                       </Link>
                     ) : (
-                      <span>{crumb.label}</span>
+                      <span className="font-medium text-[#552F0B]">
+                        {crumb.label}
+                      </span>
                     )}
                   </span>
                 ))}
               </nav>
             )}
-            <h1 className="text-base sm:text-lg font-semibold text-[#172B27] font-display truncate">
+
+            <h1 className="truncate font-display text-base font-bold tracking-tight text-[#0A0A0A] sm:text-lg">
               {title}
             </h1>
           </div>
         </div>
 
-        {/* Center/Right: Search + Controls */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        {/* Right: Workspace Controls */}
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2.5">
           {/* Desktop Search */}
-          <form onSubmit={handleSearchSubmit} className="hidden md:block relative w-56 xl:w-72">
+          <form
+            onSubmit={handleSearchSubmit}
+            className="relative hidden w-52 md:block xl:w-72"
+          >
             <Search
-              className="w-4 h-4 text-[#71817B] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#BE732F]"
               aria-hidden="true"
             />
+
             <input
               type="search"
               value={globalSearch}
               onChange={(e) => setGlobalSearch(e.target.value)}
               placeholder="Search reports, locations..."
               aria-label="Search field reports"
-              className="w-full h-10 pl-9 pr-3 rounded-xl bg-white border border-[#123D35]/14 text-sm text-[#172B27] placeholder:text-[#71817B] focus:outline-none focus:ring-2 focus:ring-[#16A477] focus:border-transparent"
+              className="h-10 w-full rounded-xl border border-[#BE732F]/20 bg-white/70 pl-9 pr-3 text-sm text-[#0A0A0A] placeholder:text-[#552F0B]/45 transition-all focus:border-[#BE732F]/60 focus:outline-none focus:ring-2 focus:ring-[#F4B64F]/40"
             />
           </form>
 
-          {/* PWA Install button (hidden automatically when installed) */}
+          {/* PWA Installation */}
           <div className="hidden sm:block">
             <PWAInstallButton compact variant="secondary" />
           </div>
 
-          {/* Connectivity Indicator */}
+          {/* Connectivity */}
           <div className="relative" ref={networkRef}>
             <button
               type="button"
               onClick={() => setNetworkPopoverOpen((v) => !v)}
               aria-expanded={networkPopoverOpen}
-              className={`min-h-[40px] px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-medium flex items-center gap-2 transition-colors cursor-pointer whitespace-nowrap ${
+              aria-label={`Connectivity: ${effectiveOnline ? "Online" : "Offline"}`}
+              className={`flex min-h-10 cursor-pointer items-center gap-2 rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition-all sm:px-3 ${
                 effectiveOnline
-                  ? 'bg-[#16A477]/12 border-[#16A477]/30 text-[#0E7A57] hover:bg-[#16A477]/18'
-                  : 'bg-[#E6A23C]/16 border-[#E6A23C]/40 text-[#8A5708] hover:bg-[#E6A23C]/22'
+                  ? "border-[#BE732F]/25 bg-[#F4B64F]/10 text-[#552F0B] hover:bg-[#F4B64F]/20"
+                  : "border-[#552F0B]/30 bg-[#552F0B]/10 text-[#552F0B] hover:bg-[#552F0B]/15"
               }`}
             >
               {effectiveOnline ? (
-                <Wifi className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                <Wifi className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
               ) : (
-                <WifiOff className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                <WifiOff className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
               )}
+
               <span className="hidden sm:inline">
-                {effectiveOnline ? 'Online' : 'Offline Mode'}
+                {effectiveOnline ? "Online" : "Offline"}
               </span>
             </button>
 
             {networkPopoverOpen && (
-              <div className="animate-modal absolute right-0 mt-2 w-72 rounded-2xl bg-white border border-[#123D35]/15 shadow-xl p-4 z-50">
-                <p className="text-xs font-semibold text-[#172B27]">
-                  Connectivity &amp; Reachability
-                </p>
-                <p className="mt-1 text-xs text-[#71817B] leading-relaxed">
+              <div className="absolute right-0 z-50 mt-2 w-[min(288px,calc(100vw-24px))] rounded-2xl border border-[#BE732F]/25 bg-[#EFEEEC] p-4 shadow-[0_18px_50px_rgba(10,10,10,0.16)]">
+                <div className="flex items-center gap-2">
+                  {effectiveOnline ? (
+                    <Wifi className="h-4 w-4 text-[#BE732F]" />
+                  ) : (
+                    <WifiOff className="h-4 w-4 text-[#552F0B]" />
+                  )}
+
+                  <p className="text-xs font-bold text-[#0A0A0A]">
+                    Connectivity & Reachability
+                  </p>
+                </div>
+
+                <p className="mt-2 text-xs leading-5 text-[#552F0B]/75">
                   {reachabilityReason}
                 </p>
-                <div className="mt-3 pt-3 border-t border-[#123D35]/10 flex items-center justify-between gap-2">
-                  <span className="text-xs font-medium text-[#172B27]">
-                    Simulate Offline Mode
-                  </span>
+
+                <div className="mt-4 flex items-center justify-between gap-3 border-t border-[#BE732F]/20 pt-3">
+                  <div>
+                    <p className="text-xs font-semibold text-[#0A0A0A]">
+                      Simulate Offline Mode
+                    </p>
+                    <p className="mt-0.5 text-[10px] text-[#552F0B]/60">
+                      Test disconnected workflows
+                    </p>
+                  </div>
+
                   <button
                     type="button"
                     role="switch"
                     aria-checked={simulatedOffline}
+                    aria-label="Simulate offline mode"
                     onClick={() => toggleSimulatedOffline()}
-                    className={`w-11 h-6 rounded-full transition-colors p-0.5 cursor-pointer ${
-                      simulatedOffline ? 'bg-[#E6A23C]' : 'bg-[#123D35]/20'
+                    className={`relative h-6 w-11 shrink-0 cursor-pointer rounded-full p-0.5 transition-colors ${
+                      simulatedOffline ? "bg-[#BE732F]" : "bg-[#552F0B]/25"
                     }`}
                   >
                     <span
-                      className={`block w-5 h-5 rounded-full bg-white shadow transition-transform ${
-                        simulatedOffline ? 'translate-x-5' : 'translate-x-0'
+                      className={`block h-5 w-5 rounded-full bg-[#EFEEEC] shadow-sm transition-transform ${
+                        simulatedOffline ? "translate-x-5" : "translate-x-0"
                       }`}
                     />
                   </button>
@@ -183,56 +222,86 @@ export function Header({
             )}
           </div>
 
-          {/* Sync Queue / Notifications Trigger */}
+          {/* Synchronization Center */}
           <button
             type="button"
             onClick={() => setSyncDrawerOpen(true)}
             aria-label={`Open Synchronization Center (${pendingBadgeCount} pending items)`}
-            className="relative min-h-[40px] min-w-[40px] px-2.5 flex items-center justify-center gap-1.5 rounded-xl bg-white border border-[#123D35]/14 text-[#172B27] hover:bg-[#F5F7F5] transition-colors cursor-pointer"
+            className="relative flex min-h-10 min-w-10 cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-[#BE732F]/20 bg-white/70 px-2.5 text-[#552F0B] transition-all hover:border-[#BE732F]/45 hover:bg-[#F4B64F]/10"
           >
             {isSyncing ? (
-              <RefreshCw className="w-4 h-4 text-[#16A477] animate-spin" />
+              <RefreshCw className="h-4 w-4 animate-spin text-[#BE732F]" />
             ) : (
-              <Bell className="w-4 h-4" />
+              <Bell className="h-4 w-4" />
             )}
+
             {pendingBadgeCount > 0 && (
-              <span className="text-[11px] font-mono tabular-nums font-semibold text-[#8A5708]">
+              <span className="font-mono text-[11px] font-bold tabular-nums text-[#552F0B]">
                 {pendingBadgeCount}
               </span>
             )}
+
+            {pendingBadgeCount > 0 && (
+              <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-[#F4B64F]" />
+            )}
           </button>
 
-          {/* User Profile & Role Switcher Menu */}
+          {/* Profile and Demo Role Menu */}
           <div className="relative" ref={profileRef}>
             <button
               type="button"
               onClick={() => setProfileMenuOpen((v) => !v)}
               aria-expanded={profileMenuOpen}
-              className="min-h-[40px] pl-1.5 pr-2 py-1 rounded-xl bg-white border border-[#123D35]/14 flex items-center gap-2 hover:bg-[#F5F7F5] transition-colors cursor-pointer"
+              aria-label="Open profile menu"
+              className="flex min-h-10 cursor-pointer items-center gap-2 rounded-xl border border-[#BE732F]/20 bg-white/70 py-1 pl-1.5 pr-2 transition-all hover:border-[#BE732F]/45 hover:bg-[#F4B64F]/10"
             >
-              <Avatar src={currentUser.avatar} name={currentUser.name} size="sm" />
-              <div className="hidden xl:block text-left">
-                <p className="text-xs font-semibold text-[#172B27] leading-tight">
+              <Avatar
+                src={currentUser.avatar}
+                name={currentUser.name}
+                size="sm"
+              />
+
+              <div className="hidden text-left xl:block">
+                <p className="max-w-28 truncate text-xs font-bold leading-tight text-[#0A0A0A]">
                   {currentUser.name}
                 </p>
-                <p className="text-[11px] text-[#71817B] leading-tight">
+
+                <p className="mt-0.5 text-[10px] capitalize leading-tight text-[#552F0B]/60">
                   {currentUser.role}
                 </p>
               </div>
-              <ChevronDown className="w-3.5 h-3.5 text-[#71817B] hidden sm:block" />
+
+              <ChevronDown className="hidden h-3.5 w-3.5 text-[#BE732F] sm:block" />
             </button>
 
             {profileMenuOpen && (
-              <div className="animate-modal absolute right-0 mt-2 w-64 rounded-2xl bg-white border border-[#123D35]/15 shadow-xl p-2 z-50">
-                <div className="px-3 py-2 border-b border-[#123D35]/10">
-                  <p className="text-xs font-semibold text-[#172B27]">{currentUser.name}</p>
-                  <p className="text-[11px] text-[#71817B]">{currentUser.unit}</p>
+              <div className="absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-2xl border border-[#BE732F]/25 bg-[#EFEEEC] shadow-[0_18px_50px_rgba(10,10,10,0.16)]">
+                {/* User Details */}
+                <div className="border-b border-[#BE732F]/20 bg-[#F4B64F]/10 px-4 py-3">
+                  <div className="flex items-center gap-3">
+                    <Avatar
+                      src={currentUser.avatar}
+                      name={currentUser.name}
+                      size="md"
+                    />
+
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-bold text-[#0A0A0A]">
+                        {currentUser.name}
+                      </p>
+                      <p className="truncate text-[11px] text-[#552F0B]/65">
+                        {currentUser.unit}
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="py-1.5">
-                  <p className="px-3 py-1 text-[11px] font-medium text-[#71817B]">
-                    Demo Role Switch
+                {/* Demo Role Switch */}
+                <div className="p-2">
+                  <p className="px-3 py-2 text-[10px] font-bold uppercase tracking-[0.15em] text-[#BE732F]">
+                    Switch Demo Role
                   </p>
+
                   {Object.values(DEMO_USERS).map((persona) => (
                     <button
                       key={persona.roleKey}
@@ -241,33 +310,36 @@ export function Header({
                         switchRole(persona.roleKey);
                         setProfileMenuOpen(false);
                       }}
-                      className={`w-full px-3 py-2 rounded-xl text-left text-xs flex items-center justify-between transition-colors cursor-pointer ${
+                      className={`flex w-full cursor-pointer items-center justify-between rounded-xl px-3 py-2.5 text-left text-xs transition-colors ${
                         demoRole === persona.roleKey
-                          ? 'bg-[#123D35]/8 text-[#123D35] font-semibold'
-                          : 'text-[#172B27] hover:bg-[#F5F7F5]'
+                          ? "bg-[#F4B64F]/20 font-bold text-[#552F0B]"
+                          : "text-[#552F0B]/75 hover:bg-[#BE732F]/10 hover:text-[#0A0A0A]"
                       }`}
                     >
                       <span>{persona.role}</span>
+
                       {demoRole === persona.roleKey && (
-                        <UserCheck className="w-3.5 h-3.5 text-[#16A477]" />
+                        <UserCheck className="h-4 w-4 text-[#BE732F]" />
                       )}
                     </button>
                   ))}
                 </div>
 
-                <div className="pt-1 border-t border-[#123D35]/10 space-y-0.5">
+                {/* Profile Actions */}
+                <div className="space-y-1 border-t border-[#BE732F]/20 p-2">
                   <Link
                     to="/settings"
                     onClick={() => setProfileMenuOpen(false)}
-                    className="w-full px-3 py-2 rounded-xl text-xs text-[#172B27] hover:bg-[#F5F7F5] flex items-center gap-2"
+                    className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-xs font-medium text-[#552F0B] transition-colors hover:bg-[#BE732F]/10"
                   >
-                    <Settings className="w-3.5 h-3.5 text-[#71817B]" />
+                    <Settings className="h-4 w-4 text-[#BE732F]" />
                     <span>Workspace Settings</span>
                   </Link>
+
                   <Link
                     to="/login"
                     onClick={() => setProfileMenuOpen(false)}
-                    className="w-full px-3 py-2 rounded-xl text-xs text-[#123D35] font-medium hover:bg-[#F5F7F5] flex items-center gap-2"
+                    className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-xs font-semibold text-[#552F0B] transition-colors hover:bg-[#F4B64F]/20"
                   >
                     <span>Switch / Demo Sign Out</span>
                   </Link>
