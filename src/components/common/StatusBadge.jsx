@@ -13,107 +13,109 @@ import {
   UserCheck,
   Wrench,
   XCircle,
-} from 'lucide-react';
+} from "lucide-react";
 
 const WORKFLOW_CONFIG = {
   Draft: {
     icon: FileEdit,
-    className: 'text-[#71817B] bg-[#F0F3F1] border-[#123D35]/10',
-    label: 'Draft',
+    className: "text-[#552F0B]/65 bg-[#552F0B]/[0.06] border-[#552F0B]/15",
+    label: "Draft",
   },
   Submitted: {
     icon: Send,
-    className: 'text-[#123D35] bg-[#123D35]/8 border-[#123D35]/18',
-    label: 'Submitted',
+    className: "text-[#552F0B] bg-[#BE732F]/[0.09] border-[#BE732F]/20",
+    label: "Submitted",
   },
   Assigned: {
     icon: UserCheck,
-    className: 'text-[#1B5B4C] bg-[#16A477]/12 border-[#16A477]/25',
-    label: 'Assigned',
+    className: "text-[#552F0B] bg-[#F4B64F]/20 border-[#F4B64F]/40",
+    label: "Assigned",
   },
-  'In Progress': {
+  "In Progress": {
     icon: Wrench,
-    className: 'text-[#9A6510] bg-[#E6A23C]/14 border-[#E6A23C]/30',
-    label: 'In Progress',
+    className: "text-[#BE732F] bg-[#BE732F]/[0.10] border-[#BE732F]/25",
+    label: "In Progress",
   },
   Resolved: {
     icon: CheckCircle2,
-    className: 'text-[#0E7A57] bg-[#16A477]/14 border-[#16A477]/30',
-    label: 'Resolved',
+    className: "text-[#552F0B] bg-[#F4B64F]/25 border-[#F4B64F]/45",
+    label: "Resolved",
   },
   Rejected: {
     icon: XCircle,
-    className: 'text-[#B23B3B] bg-[#DC5555]/12 border-[#DC5555]/25',
-    label: 'Rejected',
+    className: "text-[#0A0A0A] bg-[#552F0B]/[0.08] border-[#552F0B]/25",
+    label: "Rejected",
   },
 };
 
 const SYNC_CONFIG = {
   Pending: {
     icon: Clock,
-    className: 'text-[#9A6510] bg-[#E6A23C]/14 border-[#E6A23C]/30',
-    label: 'Pending Sync',
+    className: "text-[#552F0B] bg-[#F4B64F]/20 border-[#F4B64F]/40",
+    label: "Pending Sync",
   },
   Syncing: {
     icon: Loader2,
     spin: true,
-    className: 'text-[#123D35] bg-[#123D35]/10 border-[#123D35]/20',
-    label: 'Syncing',
+    className: "text-[#552F0B] bg-[#BE732F]/[0.10] border-[#BE732F]/25",
+    label: "Syncing",
   },
   Synchronized: {
     icon: CheckCircle2,
-    className: 'text-[#0E7A57] bg-[#16A477]/14 border-[#16A477]/30',
-    label: 'Synchronized',
+    className: "text-[#552F0B] bg-[#F4B64F]/25 border-[#F4B64F]/45",
+    label: "Synchronized",
   },
   Failed: {
     icon: CloudOff,
-    className: 'text-[#B23B3B] bg-[#DC5555]/12 border-[#DC5555]/30',
-    label: 'Sync Failed',
+    className: "text-[#0A0A0A] bg-[#552F0B]/[0.08] border-[#552F0B]/25",
+    label: "Sync Failed",
   },
 };
 
 const PRIORITY_CONFIG = {
   Low: {
     icon: ArrowUpRight,
-    className: 'text-[#71817B]',
+    className: "text-[#552F0B]/55",
   },
   Medium: {
     icon: AlertTriangle,
-    className: 'text-[#1B5B4C]',
+    className: "text-[#BE732F]",
   },
   High: {
     icon: ShieldAlert,
-    className: 'text-[#9A6510]',
+    className: "text-[#552F0B]",
   },
   Critical: {
     icon: AlertOctagon,
-    className: 'text-[#B23B3B]',
+    className: "text-[#0A0A0A]",
   },
 };
 
-export function WorkflowStatusBadge({ status, size = 'md' }) {
+function getSizeClass(size) {
+  return size === "sm" ? "px-2 py-0.5 text-[11px]" : "px-2.5 py-1 text-xs";
+}
+
+export function WorkflowStatusBadge({ status, size = "md" }) {
   const cfg = WORKFLOW_CONFIG[status] || WORKFLOW_CONFIG.Submitted;
   const Icon = cfg.icon;
-  const sizeClass = size === 'sm' ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs';
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-md border font-medium whitespace-nowrap shrink-0 ${sizeClass} ${cfg.className}`}
+      className={`inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border font-semibold ${getSizeClass(size)} ${cfg.className}`}
     >
-      <Icon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+      <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
       <span>{cfg.label}</span>
     </span>
   );
 }
 
-export function SyncStatusBadge({ syncStatus, isDraft = false, size = 'md' }) {
+export function SyncStatusBadge({ syncStatus, isDraft = false, size = "md" }) {
   if (isDraft) {
-    const sizeClass = size === 'sm' ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs';
     return (
       <span
-        className={`inline-flex items-center gap-1.5 rounded-md border font-medium whitespace-nowrap shrink-0 text-[#71817B] bg-[#F5F7F5] border-[#123D35]/10 ${sizeClass}`}
+        className={`inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border border-[#552F0B]/15 bg-[#552F0B]/[0.06] font-semibold text-[#552F0B]/65 ${getSizeClass(size)}`}
       >
-        <FileEdit className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+        <FileEdit className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
         <span>Local Only</span>
       </span>
     );
@@ -121,14 +123,13 @@ export function SyncStatusBadge({ syncStatus, isDraft = false, size = 'md' }) {
 
   const cfg = SYNC_CONFIG[syncStatus] || SYNC_CONFIG.Pending;
   const Icon = cfg.icon || RefreshCw;
-  const sizeClass = size === 'sm' ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs';
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-md border font-medium whitespace-nowrap shrink-0 ${sizeClass} ${cfg.className}`}
+      className={`inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border font-semibold ${getSizeClass(size)} ${cfg.className}`}
     >
       <Icon
-        className={`w-3.5 h-3.5 shrink-0 ${cfg.spin ? 'animate-spin' : ''}`}
+        className={`h-3.5 w-3.5 shrink-0 ${cfg.spin ? "animate-spin" : ""}`}
         aria-hidden="true"
       />
       <span>{cfg.label}</span>
@@ -141,8 +142,10 @@ export function PriorityIndicator({ priority }) {
   const Icon = cfg.icon;
 
   return (
-    <span className={`inline-flex items-center gap-1 text-xs font-semibold whitespace-nowrap ${cfg.className}`}>
-      <Icon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+    <span
+      className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-xs font-bold ${cfg.className}`}
+    >
+      <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
       <span>{priority}</span>
     </span>
   );
