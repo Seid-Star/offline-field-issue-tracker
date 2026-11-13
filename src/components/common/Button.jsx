@@ -1,37 +1,43 @@
 export function Button({
   children,
-  variant = 'primary',
-  size = 'md',
-  className = '',
+  variant = "primary",
+  size = "md",
+  className = "",
   disabled = false,
-  type = 'button',
+  type = "button",
   onClick,
   ...props
 }) {
   const base =
-    'inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap shrink-0 rounded-xl transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16A477] focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] cursor-pointer';
+    "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-xl font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F4B64F] focus-visible:ring-offset-2 focus-visible:ring-offset-[#EFEEEC] active:scale-[0.98] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-45";
 
   const variants = {
     primary:
-      'bg-[#123D35] text-white hover:bg-[#1B5B4C] shadow-sm',
+      "border border-[#0A0A0A] bg-[#0A0A0A] text-[#F4B64F] shadow-[0_4px_12px_rgba(10,10,10,0.12)] hover:border-[#552F0B] hover:bg-[#552F0B] hover:shadow-[0_7px_18px_rgba(85,47,11,0.18)]",
+
     emerald:
-      'bg-[#16A477] text-[#092B27] font-semibold hover:bg-[#139169] shadow-sm',
+      "border border-[#0A0A0A] bg-[#0A0A0A] text-[#F4B64F] shadow-[0_4px_12px_rgba(10,10,10,0.12)] hover:bg-[#552F0B]",
+
     secondary:
-      'bg-white text-[#172B27] border border-[#123D35]/15 hover:bg-[#F5F7F5]',
+      "border border-[#BE732F]/25 bg-[#EFEEEC] text-[#552F0B] hover:border-[#BE732F]/50 hover:bg-[#F4B64F]/15",
+
     ghost:
-      'bg-transparent text-[#172B27] hover:bg-[#123D35]/8',
+      "border border-transparent bg-transparent text-[#552F0B] hover:border-[#BE732F]/15 hover:bg-[#BE732F]/10",
+
     danger:
-      'bg-[#DC5555] text-white hover:bg-[#c84646] shadow-sm',
-    'danger-outline':
-      'bg-white text-[#DC5555] border border-[#DC5555]/30 hover:bg-[#DC5555]/8',
+      "border border-[#552F0B] bg-[#552F0B] text-[#EFEEEC] shadow-sm hover:border-[#0A0A0A] hover:bg-[#0A0A0A]",
+
+    "danger-outline":
+      "border border-[#552F0B]/30 bg-[#EFEEEC] text-[#552F0B] hover:border-[#552F0B]/55 hover:bg-[#552F0B]/[0.07]",
+
     glass:
-      'bg-white/12 text-white border border-white/20 hover:bg-white/20 backdrop-blur-md',
+      "border border-[#EFEEEC]/20 bg-[#EFEEEC]/[0.08] text-[#EFEEEC] backdrop-blur-md hover:border-[#F4B64F]/35 hover:bg-[#F4B64F]/15 hover:text-[#F4B64F]",
   };
 
   const sizes = {
-    sm: 'min-h-[38px] px-3 py-1.5 text-xs',
-    md: 'min-h-[44px] px-4 py-2 text-sm',
-    lg: 'min-h-[48px] px-5 py-2.5 text-sm',
+    sm: "min-h-[38px] rounded-lg px-3 py-1.5 text-xs",
+    md: "min-h-[44px] px-4 py-2 text-sm",
+    lg: "min-h-[48px] rounded-xl px-5 py-2.5 text-sm",
   };
 
   return (
