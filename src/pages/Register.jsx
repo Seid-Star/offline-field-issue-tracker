@@ -5,7 +5,6 @@ import {
   HardHat,
   Lock,
   Mail,
-  MapPin,
   User,
 } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
@@ -18,20 +17,34 @@ import { useApp } from "../context/AppContext.jsx";
 import * as api from "../services/api.js";
 
 function evaluatePasswordStrength(password) {
-  if (!password)
-    return { score: 0, label: "Enter a password", barClass: "bg-[#123D35]/15" };
+  if (!password) {
+    return {
+      score: 0,
+      label: "Enter a password",
+      barClass: "bg-[#BE732F]",
+    };
+  }
 
   let score = 0;
+
   if (password.length >= 6) score++;
   if (password.length >= 10) score++;
   if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score++;
   if (/[0-9]/.test(password) || /[^A-Za-z0-9]/.test(password)) score++;
 
-  if (score <= 1) return { score: 1, label: "Weak", barClass: "bg-[#DC5555]" };
-  if (score === 2) return { score: 2, label: "Fair", barClass: "bg-[#E6A23C]" };
-  if (score === 3)
-    return { score: 3, label: "Strong", barClass: "bg-[#1B5B4C]" };
-  return { score: 4, label: "Very Strong", barClass: "bg-[#16A477]" };
+  if (score <= 1) {
+    return { score: 1, label: "Weak", barClass: "bg-[#552F0B]" };
+  }
+
+  if (score === 2) {
+    return { score: 2, label: "Fair", barClass: "bg-[#BE732F]" };
+  }
+
+  if (score === 3) {
+    return { score: 3, label: "Strong", barClass: "bg-[#F4B64F]" };
+  }
+
+  return { score: 4, label: "Very Strong", barClass: "bg-[#F4B64F]" };
 }
 
 export function Register() {
@@ -58,6 +71,7 @@ export function Register() {
 
   const updateField = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
+
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: "" }));
     }
@@ -92,6 +106,7 @@ export function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!validate()) return;
 
     setIsSubmitting(true);
@@ -124,61 +139,76 @@ export function Register() {
   };
 
   return (
-    <AuthLayout theme="clay">
+    <AuthLayout>
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+        className="mx-auto w-full max-w-[460px]"
       >
-        <ClayCard className="p-6 sm:p-9">
-          <div className="mb-6">
-            <div className="flex items-center gap-2.5 mb-4">
-              <span className="clay-icon-well w-10 h-10 rounded-2xl text-[#123D35] flex items-center justify-center shrink-0">
-                <MapPin
-                  className="w-4 h-4"
-                  strokeWidth={2.4}
-                  aria-hidden="true"
-                />
-              </span>
-              <span className="text-sm font-bold font-display text-[#123D35]">
-                Offline Field Issue Tracker
-              </span>
-            </div>
+        <ClayCard className="p-6 sm:p-8">
+          <div className="mb-7">
+            {/* Brand */}
+            <Link to="/" className="mb-7 inline-flex items-center gap-3">
+              <img
+                src="/logo.png"
+                alt="Offline Field Issue Tracker"
+                className="h-11 w-11 shrink-0 object-contain"
+              />
 
-            <h1 className="text-2xl sm:text-3xl font-bold font-display text-[#172B27] tracking-tight">
-              Create Field Account
-            </h1>
-            <p className="mt-1.5 text-sm text-[#71817B]">
-              Register your secure field worker account.
+              <div>
+                <p className="text-sm font-bold tracking-tight text-[#0A0A0A]">
+                  Offline Field Issue Tracker
+                </p>
+
+                <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-[#BE732F]">
+                  NilePixel Technologies
+                </p>
+              </div>
+            </Link>
+
+            <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[#BE732F]">
+              Get started
             </p>
-            <p className="mt-1.5 text-xs font-medium text-[#1B5B4C]">
-              Secure registration connected to the backend.
+
+            <h1 className="text-3xl font-bold tracking-tight text-[#0A0A0A] sm:text-[34px]">
+              Create your account
+              <span className="text-[#BE732F]">.</span>
+            </h1>
+
+            <p className="mt-2 text-sm leading-relaxed text-[#552F0B]/70">
+              Set up your field worker profile to start managing field reports.
             </p>
           </div>
 
           {isSuccess ? (
-            <div className="space-y-5 py-2">
-              <div className="clay-inset rounded-2xl p-5 border border-[#16A477]/25 space-y-2">
-                <div className="flex items-center gap-2.5 text-[#0E7A57]">
-                  <CheckCircle2 className="w-5 h-5 shrink-0" />
-                  <h2 className="text-base font-semibold font-display">
-                    Registration Successful
+            <div className="space-y-5">
+              <div className="rounded-2xl border border-[#BE732F]/20 bg-white p-5">
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F4B64F]/25">
+                    <CheckCircle2 className="h-5 w-5 text-[#BE732F]" />
+                  </div>
+
+                  <h2 className="text-base font-bold text-[#0A0A0A]">
+                    Registration successful
                   </h2>
                 </div>
-                <p className="text-sm text-[#172B27] leading-relaxed">
-                  Welcome, <strong>{form.fullName}</strong>. Your field worker
-                  account has been created.
+
+                <p className="text-sm leading-relaxed text-[#552F0B]/75">
+                  Welcome,{" "}
+                  <strong className="text-[#0A0A0A]">{form.fullName}</strong>.
+                  Your field worker account has been created successfully.
                 </p>
               </div>
 
               <PrimaryButton
-                variant="clay"
+                variant="dark"
                 size="lg"
                 className="w-full"
                 onClick={() => navigate("/dashboard")}
               >
                 <span>Enter Field Workspace</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="h-4 w-4" />
               </PrimaryButton>
             </div>
           ) : (
@@ -190,7 +220,7 @@ export function Register() {
                 icon={User}
                 value={form.fullName}
                 onChange={(e) => updateField("fullName", e.target.value)}
-                placeholder="Your full name"
+                placeholder="Enter your full name"
                 autoComplete="name"
                 error={errors.fullName}
               />
@@ -215,12 +245,12 @@ export function Register() {
                   icon={Lock}
                   value={form.password}
                   onChange={(e) => updateField("password", e.target.value)}
-                  placeholder="Minimum 6 characters"
+                  placeholder="Create a password"
                   autoComplete="new-password"
                   error={errors.password}
                 />
 
-                <div className="px-1 space-y-1">
+                <div className="space-y-1.5 px-1">
                   <div className="grid grid-cols-4 gap-1.5" aria-hidden="true">
                     {[1, 2, 3, 4].map((step) => (
                       <div
@@ -228,14 +258,15 @@ export function Register() {
                         className={`h-1.5 rounded-full transition-colors duration-200 ${
                           strength.score >= step
                             ? strength.barClass
-                            : "bg-[#123D35]/10"
+                            : "bg-[#BE732F]/15"
                         }`}
                       />
                     ))}
                   </div>
-                  <p className="text-[11px] text-[#71817B]">
+
+                  <p className="text-[11px] text-[#552F0B]/65">
                     Password strength:{" "}
-                    <span className="font-semibold text-[#172B27]">
+                    <span className="font-bold text-[#BE732F]">
                       {strength.label}
                     </span>
                   </p>
@@ -249,43 +280,49 @@ export function Register() {
                 icon={Lock}
                 value={form.confirmPassword}
                 onChange={(e) => updateField("confirmPassword", e.target.value)}
-                placeholder="Re-enter password"
+                placeholder="Re-enter your password"
                 autoComplete="new-password"
                 error={errors.confirmPassword}
               />
 
-              <div className="clay-inset rounded-xl p-3 flex items-center gap-3">
-                <HardHat className="w-5 h-5 text-[#123D35]" />
+              <div className="flex items-start gap-3 rounded-xl border border-[#BE732F]/20 bg-white p-3.5">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#F4B64F]/20">
+                  <HardHat className="h-4 w-4 text-[#BE732F]" />
+                </div>
+
                 <div>
-                  <p className="text-sm font-semibold text-[#172B27]">
+                  <p className="text-sm font-bold text-[#0A0A0A]">
                     Field Worker Account
                   </p>
-                  <p className="text-xs text-[#71817B]">
+
+                  <p className="mt-0.5 text-xs leading-relaxed text-[#552F0B]/65">
                     Coordinator accounts are provisioned by an administrator.
                   </p>
                 </div>
               </div>
 
               <div>
-                <label className="flex items-start gap-2.5 text-xs text-[#172B27] cursor-pointer select-none py-1">
+                <label className="flex cursor-pointer select-none items-start gap-2.5 py-1 text-xs">
                   <input
                     type="checkbox"
                     checked={form.acceptTerms}
                     onChange={(e) =>
                       updateField("acceptTerms", e.target.checked)
                     }
-                    className="w-4 h-4 mt-0.5 rounded accent-[#123D35] cursor-pointer shrink-0"
+                    className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[#BE732F]"
                   />
-                  <span className="leading-relaxed text-[#71817B]">
+
+                  <span className="leading-relaxed text-[#552F0B]/70">
                     I agree to the{" "}
-                    <span className="font-semibold text-[#123D35]">
+                    <span className="font-bold text-[#BE732F]">
                       Terms and Conditions
                     </span>{" "}
                     and understand that reports are stored locally when offline.
                   </span>
                 </label>
+
                 {errors.acceptTerms && (
-                  <p className="mt-1 text-xs text-[#B23B3B]" role="alert">
+                  <p className="mt-1 text-xs text-[#BE732F]" role="alert">
                     {errors.acceptTerms}
                   </p>
                 )}
@@ -293,29 +330,36 @@ export function Register() {
 
               <PrimaryButton
                 type="submit"
-                variant="clay"
+                variant="dark"
                 size="lg"
                 disabled={isSubmitting}
-                className="w-full mt-2"
+                className="mt-2 w-full"
               >
                 <span>
                   {isSubmitting ? "Creating Account..." : "Create Account"}
                 </span>
-                {!isSubmitting && <ArrowRight className="w-4 h-4" />}
+
+                {!isSubmitting && <ArrowRight className="h-4 w-4" />}
               </PrimaryButton>
             </form>
           )}
 
-          <p className="mt-6 pt-5 border-t border-[#123D35]/10 text-center text-xs text-[#71817B]">
-            Already have a workspace profile?{" "}
-            <Link
-              to="/login"
-              className="font-semibold text-[#123D35] hover:underline"
-            >
-              Sign in here
-            </Link>
-          </p>
+          <div className="mt-6 border-t border-[#BE732F]/15 pt-5 text-center">
+            <p className="text-xs text-[#552F0B]/65">
+              Already have a workspace profile?{" "}
+              <Link
+                to="/login"
+                className="font-bold text-[#BE732F] transition-colors hover:text-[#552F0B]"
+              >
+                Sign in here
+              </Link>
+            </p>
+          </div>
         </ClayCard>
+
+        <p className="mt-5 text-center text-[10px] font-medium tracking-wide text-[#552F0B]/45">
+          SECURE FIELD OPERATIONS · BUILT FOR RELIABLE WORK
+        </p>
       </motion.div>
     </AuthLayout>
   );
